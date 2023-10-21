@@ -46,10 +46,16 @@ leg_id:tibia_angle,femur_angle|leg_id:tibia_angle,femur_angle|leg_id:tibia_angle
 
 ## Exemple
 
+In this example, we set the tibia angle of `leg 0` to 52.8° and the femur angle to 90.4° => 0:52.8,90.4
 ```python
-strOrder = 
+strOrder = "0:52.8,90.4|1:52.8,90.4|2:51.6,87.7|3:51.6,87.7"
 self.socket.send(bytes(strOrder, "utf-8"))
 ```
+
+<div align="center">  
+    <img src="https://i.postimg.cc/ydqBD26S/leg-and-servo-id-demo.png" alt="Logo">
+</div>
+
 ---
 
 Feel free to contribute or report issues on the project's GitHub repository.
