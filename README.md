@@ -38,10 +38,10 @@ The server expects incoming messages to be UTF-8 encoded strings. Each message s
 </div>
 
 ```
-servo_id:angle1,angle2|servo_id:angle1,angle2|servo_id:angle1,angle2
+leg_id:tibia_angle,femur_angle|leg_id:tibia_angle,femur_angle|leg_id:tibia_angle,femur_angle
 ```
 
-- `servo_id`: An integer representing the ID of the servo motor.
+- `leg_id`: An integer representing the ID of the servo motor.
 - `angle1`, `angle2`: Float values representing the angles to set for the corresponding servo motors.
 
 ## Exemple
