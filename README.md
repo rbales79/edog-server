@@ -1,9 +1,15 @@
-# TCPServer for Edog Control
-
+<div align="center">    
+    <h2 align="center">TCPServer for Edog Control</h2>
+    <p align="center">
+        If you wish to control your Edog robot via Wi-Fi, you've come to the right place 😎
+    </p>
+    <a href="https://github.com/SolidMakers/edog-server">
+        <img src="https://i.postimg.cc/tCtShWBv/Repo-illustartion.png" alt="Logo">
+     </a>
 This Python script provides a TCP server implementation to control edog's servo motors using the `adafruit_servokit` library. It listens for incoming TCP connections, receives servo angle commands, and adjusts the servo motors accordingly.
+</div>
 
 ## Requirements
-
 - Python 3.6 or higher
 - `adafruit-circuitpython-servokit` library
 
@@ -27,6 +33,10 @@ By default, the server will bind to `0.0.0.0` on port `5560`, but you can modify
 
 The server expects incoming messages to be UTF-8 encoded strings. Each message should contain one or more commands to set the angles of the servo motors. Commands should be separated by the pipe `|` character, and each command should have the following format:
 
+<div align="center">  
+    <img src="https://i.postimg.cc/2SbjKkgW/image.png" alt="Logo">
+</div>
+
 ```
 servo_id:angle1,angle2|servo_id:angle1,angle2|servo_id:angle1,angle2
 ```
@@ -34,7 +44,12 @@ servo_id:angle1,angle2|servo_id:angle1,angle2|servo_id:angle1,angle2
 - `servo_id`: An integer representing the ID of the servo motor.
 - `angle1`, `angle2`: Float values representing the angles to set for the corresponding servo motors.
 
+## Exemple
 
+```python
+strOrder = 
+self.socket.send(bytes(strOrder, "utf-8"))
+```
 ---
 
 Feel free to contribute or report issues on the project's GitHub repository.
