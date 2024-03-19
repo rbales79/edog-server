@@ -44,7 +44,7 @@ leg_id:tibia_angle,femur_angle|leg_id:tibia_angle,femur_angle|leg_id:tibia_angle
 - `leg_id`: An integer representing the ID of the servo motor.
 - `angle1`, `angle2`: Float values representing the angles to set for the corresponding servo motors.
 
-## Example
+## Exemple
 
 In this example, we set the tibia angle of `leg 0` to 52.8° and the femur angle to 90.4° => 0:52.8,90.4
 ```python

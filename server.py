@@ -1,30 +1,29 @@
 import logging
 import socket
-import time
 from adafruit_servokit import ServoKit
-from typing import Tuple, Any
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 
 class TCPServer:
     kit = ServoKit(channels=16)
 
-    def __init__(self, host: str = '0.0.0.0', port: int = 5560) -> None:
+    def __init__(self, host='0.0.0.0', port=5560):
         self.host = host
         self.port = port
         self.socket = None
         self._create_socket()
 
-    def servo_angle(self, servo_id: int, angle: float) -> None:
+    def servo_angle(self, servo_id: int, angle: float):
         """Set the angle of a servo."""
         if 0 <= angle <= 180:
             logging.info(f'Setting servo {servo_id} to angle {angle}')
             self.kit.servo[servo_id].angle = angle
+            return True
         else:
             logging.warning("Angle out of range: %s", angle)
+            return False
 
-    def _create_socket(self) -> None:
+    def _create_socket(self):
         """Create and bind the TCP socket."""
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,47 +35,53 @@ class TCPServer:
             if self.socket:
                 self.socket.close()
 
-    def _handle_client(self, conn: Tuple[socket.socket, Any]) -> None:
-        """Handle incoming client connections."""
-        logging.info(f"Connection established with {conn[1]}")
+    def _handle_client(self, conn, addr):
+        """Handle incoming client connections and send responses."""
+        logging.info(f"Connection established with {addr}")
         try:
             while True:
-                data = conn[0].recv(4096)
+                data = conn.recv(4096)
                 if not data:
                     break
                 data_string = data.decode("utf-8")
                 logging.info(f"Received message: {data_string}")
 
+                success = True
                 legs_order = data_string.split("|")
                 for leg_order in legs_order:
                     parts = leg_order.split(":")
                     if len(parts) == 2 and parts[1]:
-                        leg_id = int(parts[0])
-                        angles = list(map(float, parts[1].split(",")))
-
-                        if leg_id in [1, 3]:
-                            self.servo_angle(leg_id * 2, 180 - angles[0])
-                            self.servo_angle(leg_id * 2 + 1, 180 - angles[1])
+                        leg_id, angles_str = int(parts[0]), parts[1].split(",")
+                        if len(angles_str) == 2:
+                            # Calculate servo IDs based on leg_id
+                            femur_servo_id = leg_id * 2
+                            tibia_servo_id = leg_id * 2 + 1
+                            femur_angle = float(angles_str[0])
+                            tibia_angle = float(angles_str[1])
+                            # Set angles for both femur and tibia servos
+                            success &= self.servo_angle(femur_servo_id, femur_angle)
+                            success &= self.servo_angle(tibia_servo_id, tibia_angle)
                         else:
-                            self.servo_angle(leg_id * 2, angles[0])
-                            self.servo_angle(leg_id * 2 + 1, angles[1])
+                            success = False
                     else:
-                        logging.warning("Received malformed data: %s", leg_order)
+                        success = False
 
+                response_message = "Command executed successfully." if success else "Failed to execute command."
+                conn.sendall(response_message.encode())
         except ConnectionError:
             logging.info("Connection lost.")
         finally:
-            conn[0].close()
+            conn.close()
 
-    def start(self) -> None:
+    def start(self):
         """Start the TCP server."""
         if not self.socket:
             return
 
         while True:
             try:
-                client_conn = self.socket.accept()
-                self._handle_client(client_conn)
+                client_conn, addr = self.socket.accept()
+                self._handle_client(client_conn, addr)
             except KeyboardInterrupt:
                 logging.info("Server shutting down...")
                 break
@@ -84,7 +89,6 @@ class TCPServer:
                 logging.exception("An unexpected error occurred: %s", e)
 
         self.socket.close()
-
 
 if __name__ == "__main__":
     server = TCPServer()
