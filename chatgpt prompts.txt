@@ -1,0 +1,8 @@
+The following code uses a raspberry pi 2w connected to a PCA9685 driver board to control 8 mg90s servos as part of a quadruped robot project. 
+
+The server expects incoming messages to be UTF-8 encoded strings. Each message should contain one or more commands to set the angles of the servo motors. 
+
+Commands should be separated by the pipe | character, and each command should have the following format: leg_id:tibia_angle,femur_angle
+
+leg_id: An integer representing the ID of the leg.
+Femur_angle, Tibia_angle: Float values representing the angles to set for the corresponding servo motors.
