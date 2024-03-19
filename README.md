@@ -1,13 +1,22 @@
 <div align="center">    
     <h2 align="center">TCPServer for Edog Control</h2>
     <p align="center">
-        If you wish to control your Edog robot via Wi-Fi, you've come to the right place 😎
+        If you wish to control your Edog robot via Wi-Fi, you've come to the right place
     </p>
     <a href="https://github.com/SolidMakers/edog-server">
         <img src="https://i.postimg.cc/tCtShWBv/Repo-illustartion.png" alt="Logo">
      </a>
 This Python script provides a TCP server implementation to control edog's servo motors using the `adafruit_servokit` library. It listens for incoming TCP connections, receives servo angle commands, and adjusts the servo motors accordingly.
 </div>
+
+## 3/18/2024 Notes
+- Created a simple flask app to be able to send position commands
+- Updated server.py to improve logging, error handling, session stickyness
+- all of the packages were already installed when I flashed my rpizero 2w
+- had to reboot after enabling i2c
+- inverse kinematics are simple in theory, yet ridiculously hard to implement(i feel like this is me)
+- Would really be nice to have the instructions here in git, downloaded a pdf of the site just as a reference
+- walking code 200% does not work, i have no idea how to make this thing walk(see note about inverse kinematics)
 
 ## Requirements
 - Python 3.6 or higher
